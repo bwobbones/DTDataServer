@@ -235,7 +235,7 @@ class PlayerDataController {
 		lines.each { if (it.contains("var currentTeam")) { teamJSON = it }}		
 		teamJSON = teamJSON.trim().minus("var currentTeam = ")
 
-		render teamJSON + "\n";
+		render teamJSON + "\n"
 		
 		JsonFactory factory = new JsonFactory()		
 		ObjectMapper mapper = new ObjectMapper(factory)
