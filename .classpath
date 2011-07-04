@@ -15,5 +15,10 @@
 	<classpathentry kind="lib" path="lib/tagsoup-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-server-standalone-2.0b2.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-all-1.7.4.jar" sourcepath="C:/java/jackson-src-1.7.4"/>
+	<classpathentry kind="src" path="tomcat-1.2.2-src-groovy">
+		<attributes>
+			<attribute name="com.springsource.sts.grails.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="web-app/WEB-INF/classes"/>
 </classpath>

@@ -11,7 +11,7 @@ class Player {
 	String comp
 	Boolean inTeam
 	Boolean captain
-    static hasMany = [ scores : Score,  positions : Position ]		
+    static hasMany = [scores:Score, positions:Position]		
 	
 	def getYearAverage(year)
  	{	

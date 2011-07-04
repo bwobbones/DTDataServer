@@ -13,14 +13,14 @@ hibernate {
 environments {
 	development {
 		dataSource {
-			dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://192.168.1.8:3306/DTPlayerDB"
+			dbCreate = "create" // one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost:3306/DTPlayerDB"
 		}
 	}
 	test {
 		dataSource {
 			dbCreate = "create-drop"
-			url = "jdbc:mysql://192.168.1.8:3306/DTPlayerDBTest"
+			url = "jdbc:mysql://localhost:3306/DTPlayerDBTest"
 		}
 	}
 	production {

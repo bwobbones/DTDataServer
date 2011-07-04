@@ -21,6 +21,8 @@ import org.ccil.cowan.tagsoup.*;
 
 class PlayerDataController {
 	
+	def year = '2011'
+	
 	def index = { 
 		render "index"
 	}
@@ -32,7 +34,7 @@ class PlayerDataController {
 		
 		render "Workin - grabbing from Footywire.\n"
 		
-		(1..22).each { rnd ->				
+		(1..1).each { rnd ->				
 			
 			println "doing: " + rnd
 		
@@ -60,7 +62,9 @@ class PlayerDataController {
 			
 							if (p == null)
 							{
-								p = new Player(scores: [], positions: [position], nameFootyWire: playerName, team: it.td[2].text(), price: it.td[3].text().replace('$', '').replace(',', ''))					
+								p = new Player(scores: [], positions: [position], nameFootyWire: playerName, 
+									team: it.td[2].text(), price: it.td[3].text().replace('$', '').replace(',', ''),
+									inTeam: false, comp: 'DT', captain: false, playing: false)					
 								
 								savePlayer(p)											
 							}
@@ -70,13 +74,13 @@ class PlayerDataController {
 								p.positions << position
 							}
 							
-							def thisScore = p.scores.find { s -> s.year == '2010' && s.round == rnd }
+							def thisScore = p.scores.find { s -> s.year == year && s.round == rnd }
 							
 							if (thisScore == null)
 							{
 								def sc = it.td[4].text()
 								
-								def newScore = new Score(player: p, year: '2010', round: rnd, score: sc) 
+								def newScore = new Score(player: p, year: year, round: rnd, score: sc) 
 								
 								if (!newScore.validate())
 								{
@@ -189,7 +193,7 @@ class PlayerDataController {
 				
 					p = new Player(scores: [], positions: [gatherPos(player)], nameFootyWire: player.first_name + " " + player.last_name, 
 							team: player.team, price: player.price)
-					def s = new Score(player: p, year: '2010', round: 22, score: 20.0)
+					def s = new Score(player: p, year: year, round: 22, score: 20.0)
 					p.getScores().add(s)
 					savePlayer(p)								
 				}
@@ -253,7 +257,7 @@ class PlayerDataController {
 					
 					p = new Player(scores: [], positions: [posMap[pos]], nameFootyWire: name, 
 							team: team, price: price, playing: playing, comp: "FT", inTeam: false, captain: false)
-					def s = new Score(player: p, year: '2011', round: 1, score: score)
+					def s = new Score(player: p, year: year, round: 1, score: score)
 					p.getScores().add(s)
 					savePlayer(p)
 					
@@ -336,7 +340,7 @@ class PlayerDataController {
 							
 							def p = new Player(scores: [], positions: [posMap[pos]], nameFootyWire: name, 
 									team: team, price: price, playing: playing, comp: "FT", inTeam: false, captain: false)
-							def s = new Score(player: p, year: '2011', round: 1, score: score)
+							def s = new Score(player: p, year: year, round: 1, score: score)
 							p.getScores().add(s)
 							savePlayer(p)
 							
@@ -427,8 +431,8 @@ class PlayerDataController {
 				pMap.nameFootyWire = it.nameFootyWire
 				pMap.price = it.price 
 				pMap.team = it.team
-				pMap.average = it.getYearAverage(2010)
-				pMap.trend = it.getTrend() 
+				//pMap.average = it.getYearAverage(year)
+				//pMap.trend = it.getTrend() 
 				playersMap.players << pMap
 			}
 
@@ -439,7 +443,48 @@ class PlayerDataController {
 			}
 		}	
 	}
-	
+
+	def allPlayers = {
+		if (params.year && params.round) {
+			
+			def playersMap = ['players':[[:]]]
+			
+			println "year: " + params.year + "round: " + params.round
+			
+			def results = Player.executeQuery(
+					'select p from Player p left join p.scores s where s.year = :year and s.round = :round',
+					[year: params.year as Integer, round: params.round as Integer])
+						
+
+			results.each {
+				
+				println "score: " + it.scores.first().score
+				
+				
+				def pMap = [:]
+				pMap.id = it.id
+				pMap.nameFootyWire = it.nameFootyWire
+				pMap.price = it.price
+				pMap.team = it.team
+				pMap.score = it.scores.first().score
+				//pMap.average = it.getYearAverage(year)
+				//pMap.trend = it.getTrend()
+				playersMap.players << pMap
+			}
+
+			if (results)
+			{
+				response.status = 200
+				render playersMap as JSON
+			}
+			else
+			{
+				response.status = 200
+				render "{}"
+			}
+		}
+	}
+		
 	def playerName = {       
 		if (params.playerName) {
 			def results = Player.findByNameFootyWireLike("%${params.playerName}%")
