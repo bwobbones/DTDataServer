@@ -44,10 +44,20 @@ grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
+def catalinaBase = System.properties.getProperty('catalina.base')
+if (!catalinaBase) catalinaBase = '.'   // just in case
+def logDirectory = "${catalinaBase}/logs"
+
+tomcat.deploy.username="bwobbones"
+tomcat.deploy.password="bwobbon3s"
+tomcat.deploy.url="http://192.168.1.8:8080/manager"
+
+StackTrace="error,stdout"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "http://localhost/DTDataServer"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
@@ -58,29 +68,23 @@ environments {
 
 }
 
-// log4j configuration
-log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
-
+log4j = { root ->
+     appenders {
+             rollingFile name:'stdout', file:"${logDirectory}/${appName}.log".toString(), maxFileSize:'100KB'
+             rollingFile name:'stacktrace', file:"${logDirectory}/${appName}_stack.log".toString(), maxFileSize:'100KB'
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-	       'org.codehaus.groovy.grails.web.pages', //  GSP
-	       'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-	       'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-	       'org.codehaus.groovy.grails.web.mapping', // URL mapping
-	       'org.codehaus.groovy.grails.commons', // core / classloading
-	       'org.codehaus.groovy.grails.plugins', // plugins
-	       'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-	       'org.springframework',
-	       'org.hibernate',
-           'net.sf.ehcache.hibernate'
-
-    warn   'org.mortbay.log'
+           'org.codehaus.groovy.grails.web.pages', //  GSP
+           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+           'org.codehaus.groovy.grails.web.mapping', // URL mapping
+           'org.codehaus.groovy.grails.commons', // core / classloading
+           'org.codehaus.groovy.grails.plugins', // plugins
+           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+           'org.springframework',
+           'org.hibernate'
+    root.level = org.apache.log4j.Level.WARN
 }
 
 

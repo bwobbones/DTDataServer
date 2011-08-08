@@ -5,10 +5,10 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;	   
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.WebElement;
+//import org.openqa.selenium.firefox.FirefoxDriver;
+//import org.openqa.selenium.ie.InternetExplorerDriver;
 
 import groovy.util.slurpersupport.GPathResult;
 import groovy.xml.StreamingMarkupBuilder;
@@ -145,7 +145,7 @@ class PlayerDataController {
 	    '4' : Position.RU	    
 	]
 	
-	def updateDreamTeam = {
+/*	def updateDreamTeam = {
 		render "Workin - grabbing from Dreamteam direct.\n"
 		
 		WebDriver driver = new FirefoxDriver();
@@ -216,8 +216,9 @@ class PlayerDataController {
 		
 		driver.close();
 	}
+	*/
 	
-	def updateCurrentTeam = {
+/*	def updateCurrentTeam = {
 		render "Workin - updating current team.\n"
 		def tagsoupParser = new Parser()
 		def slurper = new XmlSlurper(tagsoupParser)
@@ -273,7 +274,9 @@ class PlayerDataController {
 		response.status = 200
 		
 	}
+	*/
 	
+	/*
 	def loginFT = {	driver ->	
 		driver.get("http://www.footytips.com.au/competitions")
 		
@@ -286,7 +289,9 @@ class PlayerDataController {
 		WebElement loginButton = driver.findElementByXPath("//html/body/div[5]/table/tbody/tr[2]/td/div/table/tbody/tr/td/table/tbody/tr/td[2]/div/form/input[3]")
 		loginButton.click()
 	}
+	*/
 	
+	/*
 	def updateFootyTips = {
 		render "Workin - grabbing from FootyTips.\n"
 		
@@ -368,6 +373,7 @@ class PlayerDataController {
 		response.status = 200			
 		render "OK"
 	}
+	*/
 	
 	public static String createString(GPathResult root) { 
 		return new StreamingMarkupBuilder().bind { out << root } 
